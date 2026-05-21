@@ -1,0 +1,79 @@
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.team-card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  padding: 16px;
+  box-shadow: var(--tf-shadow);
+  display: grid;
+  gap: 12px;
+}
+
+.team-top {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.team-top h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.team-top p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--tf-muted);
+}
+
+.role-pill {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.2);
+  color: var(--tf-muted);
+}
+
+.role-pill.role-admin {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--tf-primary-strong);
+}
+
+.team-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.team-metrics span {
+  font-size: 11px;
+  color: var(--tf-muted);
+}
+
+.team-metrics strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 15px;
+}
+
+.role-select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  font-size: 12px;
+}
+
+.role-readonly {
+  font-size: 12px;
+  color: var(--tf-muted);
+}

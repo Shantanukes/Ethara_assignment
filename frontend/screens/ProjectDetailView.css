@@ -1,0 +1,42 @@
+.back-link {
+  border: none;
+  background: transparent;
+  color: var(--tf-muted);
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.project-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.project-hero h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.project-hero p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--tf-muted);
+}
+
+.project-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.project-filters .search-field {
+  margin-left: auto;
+}
