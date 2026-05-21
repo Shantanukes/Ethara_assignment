@@ -13,7 +13,7 @@ import ProjectForm from "./components/forms/ProjectForm";
 import { fd, AKEYS } from "./constants";
 import "./App.css";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://etharaassignment-production-c6a6.up.railway.app';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function App() {
   const [users, setUsers] = useState([]);
@@ -178,7 +178,12 @@ export default function App() {
         )}
         {view === "team" && (
           <TeamView users={users} tasks={tasks} currentUser={currentUser}
-            onChangeRole={(uid, role) => setUsers(us => us.map(u => u.id === uid ? { ...u, role } : u))} />
+            onChangeRole={(uid, role) => {
+              axios.post(`${API_BASE_URL}/users/update/${uid}`, { role })
+                .then(res => console.log(res.data))
+                .catch(err => console.error("Error updating role:", err));
+              setUsers(us => us.map(u => u.id === uid ? { ...u, role } : u));
+            }} />
         )}
         {view === "project-detail" && activeProject && (
           <ProjectDetailView project={activeProject} tasks={tasks} users={users}

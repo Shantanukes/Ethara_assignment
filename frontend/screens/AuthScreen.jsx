@@ -6,7 +6,7 @@ import Select from '../components/FormElements/Select';
 import Btn from '../components/FormElements/Btn';
 import './AuthScreen.css';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://etharaassignment-production-c6a6.up.railway.app';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 function AuthScreen({ users, setUsers, onLogin }) {
   const [mode, setMode] = useState("login");

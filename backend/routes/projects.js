@@ -21,5 +21,10 @@ router.route('/add').post((req, res) => {
     .then(project => res.json(project))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+router.route('/:id').delete((req, res) => {
+  Project.findByIdAndDelete(req.params.id)
+    .then(() => res.json('Project deleted.'))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
 
 module.exports = router;

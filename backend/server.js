@@ -11,7 +11,7 @@ app.use(express.json());
 
 const seedDatabase = require('./seed');
 
-const uri = process.env.MONGO_URL || 'mongodb://localhost:27017/taskflow';
+const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/taskflow';
 mongoose.connect(uri)
   .then(async () => {
     console.log("MongoDB database connection established successfully");

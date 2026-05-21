@@ -20,9 +20,11 @@ function TaskForm({ init, projects, users, currentUser, onSave, onClose }) {
       <Textarea label="Description" value={f.description} onChange={set("description")} placeholder="Optional details…" />
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12 }}>
         <Select label="Project" value={f.projectId} onChange={set("projectId")}>
+          <option value="" disabled>Select project</option>
           {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
         </Select>
         <Select label="Assign to" value={f.assignedTo} onChange={set("assignedTo")}>
+          <option value="" disabled>Select member</option>
           {members.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
         </Select>
         <Select label="Status" value={f.status} onChange={set("status")}>
