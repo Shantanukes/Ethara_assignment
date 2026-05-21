@@ -43,7 +43,13 @@
   flex-direction: column;
   justify-content: space-between;
   overflow-y: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
   animation: gradientDrift 14s ease-in-out infinite;
+}
+
+.auth-branding::-webkit-scrollbar {
+  display: none;
 }
 
 .auth-branding::before,
@@ -192,6 +198,12 @@
   justify-content: center;
   padding: 2.5rem 2rem;
   overflow-y: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.auth-form-container::-webkit-scrollbar {
+  display: none;
 }
 
 .auth-form-wrapper {
