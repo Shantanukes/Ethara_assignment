@@ -1,21 +1,19 @@
 .sidebar {
-  width: 240px;
+  width: 260px;
   background: var(--tf-dark);
   color: #fff;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   border-right: 1px solid rgba(148, 163, 184, 0.08);
-  position: sticky;
-  top: 0;
-  z-index: 50;
 }
 
 .sidebar-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 18px 16px;
+  gap: 12px;
+  padding: 24px 20px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.1);
 }
 
@@ -33,7 +31,8 @@
 
 .brand-name {
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
+  letter-spacing: 0.5px;
 }
 
 .role-pill {
@@ -41,10 +40,11 @@
   background: rgba(16, 185, 129, 0.18);
   color: #6ee7b7;
   font-size: 10px;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 999px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  font-weight: 600;
 }
 
 .sidebar-close {
@@ -57,54 +57,61 @@
 }
 
 .sidebar-nav {
-  padding: 12px 10px;
+  padding: 20px 14px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
   border: none;
   background: transparent;
   color: rgba(255, 255, 255, 0.65);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition: all 0.2s ease;
   position: relative;
+  overflow: hidden;
 }
 
 .nav-item i {
-  font-size: 18px;
+  font-size: 20px;
+  transition: transform 0.2s ease;
 }
 
 .nav-item:hover {
-  background: rgba(148, 163, 184, 0.15);
+  background: rgba(255, 255, 255, 0.06);
   color: #fff;
-  transform: translateX(2px);
+  transform: translateX(4px);
 }
 
 .nav-item.active {
-  background: rgba(16, 185, 129, 0.2);
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.02) 100%);
   color: #a7f3d0;
-  box-shadow: inset 0 0 0 1px rgba(16, 185, 129, 0.2);
 }
 
 .nav-item.active::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 8px;
-  bottom: 8px;
-  width: 3px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #34d399, #10b981);
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.nav-item.active i {
+  color: #10b981;
+  transform: scale(1.1);
 }
 
 .sidebar-footer {

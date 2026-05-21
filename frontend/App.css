@@ -33,12 +33,14 @@ body {
 .app-shell {
   position: relative;
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: var(--tf-bg);
 }
 
 .main-content {
   flex: 1;
+  height: 100vh;
   overflow-y: auto;
   background: var(--tf-bg);
 }

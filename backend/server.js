@@ -9,10 +9,13 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+const seedDatabase = require('./seed');
+
 const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/taskflow';
 mongoose.connect(uri)
-  .then(() => {
+  .then(async () => {
     console.log("MongoDB database connection established successfully");
+    await seedDatabase();
   })
   .catch((err) => {
     console.error("MongoDB connection error:", err.message);
