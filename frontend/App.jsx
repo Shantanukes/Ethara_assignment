@@ -13,6 +13,8 @@ import ProjectForm from "./components/forms/ProjectForm";
 import { fd, AKEYS } from "./constants";
 import "./App.css";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://etharaassignment-production-c6a6.up.railway.app';
+
 export default function App() {
   const [users, setUsers] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -50,9 +52,9 @@ export default function App() {
     const { mockUsers, mockProjects, mockTasks } = buildMockData();
 
     Promise.allSettled([
-      axios.get('http://localhost:5000/users/'),
-      axios.get('http://localhost:5000/projects/'),
-      axios.get('http://localhost:5000/tasks/'),
+      axios.get(`${API_BASE_URL}/users/`),
+      axios.get(`${API_BASE_URL}/projects/`),
+      axios.get(`${API_BASE_URL}/tasks/`),
     ])
       .then(([usersRes, projectsRes, tasksRes]) => {
         const usersData = usersRes.status === "fulfilled" ? usersRes.value.data : null;
@@ -91,12 +93,12 @@ export default function App() {
 
   const saveTask = (form) => {
     if (modal?.task?.id) {
-        axios.post('http://localhost:5000/tasks/update/' + modal.task.id, { status: form.status })
+        axios.post(`${API_BASE_URL}/tasks/update/` + modal.task.id, { status: form.status })
             .then(res => console.log(res.data));
       setTasks(ts => ts.map(t => t.id === modal.task.id ? { ...t, ...form } : t));
     } else {
         const newTaskPayload = { ...form };
-        axios.post('http://localhost:5000/tasks/add', newTaskPayload)
+        axios.post(`${API_BASE_URL}/tasks/add`, newTaskPayload)
             .then(res => {
                 setTasks(ts => [...ts, { ...res.data, id: res.data._id }]);
             });
@@ -106,7 +108,7 @@ export default function App() {
 
   const saveProject = (form) => {
     const newProjectPayload = { ...form, createdBy: currentUser.id };
-    axios.post('http://localhost:5000/projects/add', newProjectPayload)
+    axios.post(`${API_BASE_URL}/projects/add`, newProjectPayload)
         .then(res => {
             setProjects(ps => [...ps, { ...res.data, id: res.data._id }]);
         });
@@ -153,7 +155,7 @@ export default function App() {
             onNewProject={() => setModal({ type: "create-project" })}
             onViewProject={viewProject}
             onDeleteProject={id => { 
-                axios.delete('http://localhost:5000/projects/'+id)
+                axios.delete(`${API_BASE_URL}/projects/`+id)
                     .then(response => { console.log(response.data)});
                 setProjects(ps => ps.filter(p => p.id !== id)); 
                 setTasks(ts => ts.filter(t => t.projectId !== id)); 
@@ -164,12 +166,12 @@ export default function App() {
             onNewTask={() => setModal({ type: "create-task", task: null })}
             onEditTask={t => setModal({ type: "edit-task", task: t })}
             onDeleteTask={id => {
-                axios.delete('http://localhost:5000/tasks/'+id)
+                axios.delete(`${API_BASE_URL}/tasks/`+id)
                     .then(response => { console.log(response.data)});
                 setTasks(ts => ts.filter(t => t.id !== id))
             }}
             onStatusChange={(id, s) => {
-                axios.post('http://localhost:5000/tasks/update/' + id, { status: s })
+                axios.post(`${API_BASE_URL}/tasks/update/` + id, { status: s })
                     .then(res => console.log(res.data));
                 setTasks(ts => ts.map(t => t.id === id ? { ...t, status: s } : t))
             }} />
@@ -184,12 +186,12 @@ export default function App() {
             onNewTask={() => setModal({ type: "create-task", task: null })}
             onEditTask={t => setModal({ type: "edit-task", task: t })}
             onDeleteTask={id => {
-                axios.delete('http://localhost:5000/tasks/'+id)
+                axios.delete(`${API_BASE_URL}/tasks/`+id)
                     .then(response => { console.log(response.data)});
                 setTasks(ts => ts.filter(t => t.id !== id))
             }}
             onStatusChange={(id, s) => {
-                axios.post('http://localhost:5000/tasks/update/' + id, { status: s })
+                axios.post(`${API_BASE_URL}/tasks/update/` + id, { status: s })
                     .then(res => console.log(res.data));
                 setTasks(ts => ts.map(t => t.id === id ? { ...t, status: s } : t))
             }}

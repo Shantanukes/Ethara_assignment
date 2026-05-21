@@ -6,6 +6,8 @@ import Select from '../components/FormElements/Select';
 import Btn from '../components/FormElements/Btn';
 import './AuthScreen.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://etharaassignment-production-c6a6.up.railway.app';
+
 function AuthScreen({ users, setUsers, onLogin }) {
   const [mode, setMode] = useState("login");
   const [form, setForm] = useState({ name: "", email: "", password: "", role: "member" });
@@ -40,7 +42,7 @@ function AuthScreen({ users, setUsers, onLogin }) {
         onLogin(userWithId);
       };
 
-      axios.post('http://localhost:5000/users/add', nu)
+      axios.post(`${API_BASE_URL}/users/add`, nu)
         .then(res => {
           const userWithId = { ...res.data, id: res.data._id };
           setUsers(u => [...u, userWithId]);
