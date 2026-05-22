@@ -1,0 +1,8 @@
+[build]
+cmd = "npm run build"
+
+[build.args]
+VITE_API_URL = { secret = "VITE_API_URL" }
+
+[deploy]
+cmd = "npx serve -s dist -l $PORT"
