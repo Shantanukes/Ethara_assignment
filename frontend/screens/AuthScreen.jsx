@@ -1,56 +1,52 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { login, register, errMsg } from '../services/api';
 import { AKEYS } from '../constants';
 import Input from '../components/FormElements/Input';
 import Select from '../components/FormElements/Select';
 import Btn from '../components/FormElements/Btn';
+import { useToast } from '../components/Toast';
 import './AuthScreen.css';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-function AuthScreen({ users, setUsers, onLogin }) {
-  const [mode, setMode] = useState("login");
-  const [form, setForm] = useState({ name: "", email: "", password: "", role: "member" });
-  const [error, setError] = useState("");
+function AuthScreen({ users, onLogin }) {
+  const toast = useToast();
+  const [mode, setMode] = useState('login');
+  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'member' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
 
-  const submit = () => {
-    setError("");
-    if (mode === "login") {
-      const email = form.email.trim().toLowerCase();
-      const password = form.password.trim();
-      const u = users.find(u => u.email.toLowerCase() === email && u.password === password);
-      if (!u) { setError("Invalid email or password."); return; }
-      onLogin(u);
-    } else {
-      const name = form.name.trim();
-      const email = form.email.trim().toLowerCase();
-      const password = form.password.trim();
-      if (!name || !email || !password) { setError("All fields are required."); return; }
-      if (users.find(u => u.email.toLowerCase() === email)) { setError("Email already in use."); return; }
-      const initials = form.name.trim().split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
-      const nu = {
-        name, email,
-        password, role: form.role, initials, color: AKEYS[users.length % AKEYS.length]
-      };
+  const submit = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      if (mode === 'login') {
+        const data = await login(form.email.trim(), form.password.trim());
+        localStorage.setItem('taskflow_token', data.token);
+        const user = { ...data.user, id: String(data.user._id || data.user.id) };
+        onLogin(user);
+        toast.success(`Welcome back, ${user.name.split(' ')[0]}!`);
+      } else {
+        const name = form.name.trim();
+        const email = form.email.trim().toLowerCase();
+        const password = form.password.trim();
+        if (!name || !email || !password) { setError('All fields are required.'); return; }
 
-      const addLocalUser = () => {
-        const userWithId = { ...nu, id: `local-${Date.now()}` };
-        setUsers(u => [...u, userWithId]);
-        onLogin(userWithId);
-      };
-
-      axios.post(`${API_BASE_URL}/users/add`, nu)
-        .then(res => {
-          const userWithId = { ...res.data, id: res.data._id };
-          setUsers(u => [...u, userWithId]);
-          onLogin(userWithId);
-        })
-        .catch(() => {
-          addLocalUser();
-        });
+        const initials = name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+        const color = AKEYS[(users?.length || 0) % AKEYS.length];
+        const data = await register({ name, email, password, role: form.role, initials, color });
+        localStorage.setItem('taskflow_token', data.token);
+        const user = { ...data.user, id: String(data.user._id || data.user.id) };
+        onLogin(user);
+        toast.success(`Account created! Welcome, ${user.name.split(' ')[0]}!`);
+      }
+    } catch (err) {
+      const msg = errMsg(err);
+      setError(msg);
+      toast.error(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,6 +55,23 @@ function AuthScreen({ users, setUsers, onLogin }) {
     { email: 'member1@test.com', password: 'password', role: 'Member' },
     { email: 'member2@test.com', password: 'password', role: 'Member' },
   ];
+
+  const quickLogin = async (email, password) => {
+    setForm(f => ({ ...f, email, password }));
+    setLoading(true);
+    setError('');
+    try {
+      const data = await login(email, password);
+      localStorage.setItem('taskflow_token', data.token);
+      const user = { ...data.user, id: String(data.user._id || data.user.id) };
+      onLogin(user);
+      toast.success(`Welcome back, ${user.name.split(' ')[0]}!`);
+    } catch (err) {
+      setError(errMsg(err));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="auth-screen">
@@ -70,16 +83,24 @@ function AuthScreen({ users, setUsers, onLogin }) {
             <p>Your team's calm center for projects, tasks, and momentum. Sign in to get moving.</p>
           </div>
           <div className="demo-credentials">
-            <h3>Demo Accounts</h3>
+            <h3>Quick Login</h3>
             <ul>
               {demoUsers.map(user => (
                 <li key={user.email}>
-                  <strong>{user.role}:</strong> <code>{user.email}</code> / <code>{user.password}</code>
+                  <button
+                    className="demo-login-btn"
+                    onClick={() => quickLogin(user.email, user.password)}
+                    disabled={loading}
+                  >
+                    <strong>{user.role}</strong>
+                    <code>{user.email}</code>
+                  </button>
                 </li>
               ))}
             </ul>
           </div>
         </div>
+
         <div className="auth-form-container">
           <div className="auth-form-wrapper">
             <div className="auth-header">
@@ -88,70 +109,62 @@ function AuthScreen({ users, setUsers, onLogin }) {
               </div>
               <h2>TaskFlow</h2>
               <p className="auth-subtitle">
-                {mode === "login" ? "Welcome back. Lets get to work." : "Start your new workspace in minutes."}
+                {mode === 'login' ? "Welcome back. Let's get to work." : 'Start your new workspace in minutes.'}
               </p>
             </div>
 
             <div className="auth-form">
               <div className="tab-buttons">
-                <button onClick={() => { setMode("login"); setError(""); }} className={mode === 'login' ? 'active' : ''}>
+                <button onClick={() => { setMode('login'); setError(''); }} className={mode === 'login' ? 'active' : ''}>
                   Sign In
                 </button>
-                <button onClick={() => { setMode("signup"); setError(""); }} className={mode === 'signup' ? 'active' : ''}>
+                <button onClick={() => { setMode('signup'); setError(''); }} className={mode === 'signup' ? 'active' : ''}>
                   Create Account
                 </button>
               </div>
 
               <div className="form-fields">
-                {mode === "signup" && (
+                {mode === 'signup' && (
                   <div className="field">
-                    <Input label="Full name" value={form.name} onChange={set("name")} placeholder="Your name" className="auth-input" />
+                    <Input label="Full name" value={form.name} onChange={set('name')} placeholder="Your name" className="auth-input" />
                   </div>
                 )}
                 <div className="field">
-                  <Input label="Email" type="email" value={form.email} onChange={set("email")} placeholder="you@example.com" className="auth-input" />
+                  <Input label="Email" type="email" value={form.email} onChange={set('email')} placeholder="you@example.com" className="auth-input" />
                 </div>
                 <div className="field">
                   <label className="field-label">Password</label>
                   <div className="password-wrap">
                     <input
                       className="auth-input"
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       value={form.password}
-                      onChange={set("password")}
+                      onChange={set('password')}
                       placeholder="Enter your password"
-                      onKeyDown={e => e.key === "Enter" && submit()}
+                      onKeyDown={e => e.key === 'Enter' && submit()}
                     />
-                    <button
-                      type="button"
-                      className="password-toggle"
-                      onClick={() => setShowPassword(v => !v)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                    >
-                      {showPassword ? "Hide" : "Show"}
+                    <button type="button" className="password-toggle" onClick={() => setShowPassword(v => !v)}>
+                      {showPassword ? 'Hide' : 'Show'}
                     </button>
                   </div>
                 </div>
-                {mode === "signup" && (
+                {mode === 'signup' && (
                   <div className="field">
-                    <Select label="Role" value={form.role} onChange={set("role")}>
+                    <Select label="Role" value={form.role} onChange={set('role')}>
                       <option value="member">Member</option>
                       <option value="admin">Admin</option>
                     </Select>
                   </div>
                 )}
-                {mode === "login" && (
-                  <button type="button" className="link-btn">Forgot password?</button>
-                )}
                 {error && <p className="error-message">{error}</p>}
-                <Btn variant="primary" onClick={submit} style={{ width: "100%", justifyContent: "center", padding: "12px 0", marginTop: 8, fontSize: 15 }}>
-                  {mode === "login" ? "Sign In" : "Create Account"}
+                <Btn
+                  variant="primary"
+                  onClick={submit}
+                  disabled={loading}
+                  style={{ width: '100%', justifyContent: 'center', padding: '12px 0', marginTop: 8, fontSize: 15 }}
+                >
+                  {loading ? 'Please wait…' : mode === 'login' ? 'Sign In' : 'Create Account'}
                 </Btn>
-                <div className="divider"><span>or</span></div>
-                <button type="button" className="google-btn" aria-label="Continue with Google">
-                  <span className="google-icon">G</span>
-                  Continue with Google
-                </button>
                 <p className="legal-text">
                   By continuing, you agree to the Terms and acknowledge the Privacy Policy.
                 </p>

@@ -26,8 +26,12 @@ function TaskRow({ task, users, projects, canEdit, onEdit, onDelete, onStatusCha
           value={task.status}
           onChange={e => onStatusChange(task.id, e.target.value)}
           className="task-status-select"
-          style={{ background: STATUS_MAP[task.status].bg, color: STATUS_MAP[task.status].fg }}
+          style={{ 
+            background: STATUS_MAP[task.status]?.bg || '#E2E8F0', 
+            color: STATUS_MAP[task.status]?.fg || '#475569' 
+          }}
         >
+          <option value="backlog">Backlog</option>
           <option value="todo">To Do</option>
           <option value="in-progress">In Progress</option>
           <option value="done">Done</option>

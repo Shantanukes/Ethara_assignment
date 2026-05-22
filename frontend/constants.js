@@ -11,6 +11,7 @@ export const STATUS_MAP = {
   todo:        { label: "To Do",       bg: "#F1EFE8", fg: "#444441" },
   "in-progress":{ label: "In Progress", bg: "#FAEEDA", fg: "#854F0B" },
   done:        { label: "Done",        bg: "#EAF3DE", fg: "#3B6D11" },
+  backlog:     { label: "Backlog",     bg: "#E2E8F0", fg: "#475569" },
 };
 export const PRIORITY_MAP = {
   low:    { fg: "#3B6D11" },

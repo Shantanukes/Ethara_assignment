@@ -1,17 +1,24 @@
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
 }
 
 .team-card {
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--tf-card);
   border-radius: 18px;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  padding: 16px;
+  border: 1px solid var(--tf-border);
+  padding: 18px;
   box-shadow: var(--tf-shadow);
+  backdrop-filter: blur(16px);
   display: grid;
-  gap: 12px;
+  gap: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.14);
 }
 
 .team-top {
@@ -21,14 +28,15 @@
   align-items: center;
 }
 
-.team-top h4 {
+.team-info h4 {
   margin: 0;
   font-size: 14px;
   font-weight: 600;
+  color: var(--tf-ink);
 }
 
-.team-top p {
-  margin: 4px 0 0;
+.team-info p {
+  margin: 3px 0 0;
   font-size: 12px;
   color: var(--tf-muted);
 }
@@ -37,14 +45,15 @@
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: rgba(148, 163, 184, 0.2);
   color: var(--tf-muted);
+  white-space: nowrap;
 }
 
 .role-pill.role-admin {
-  background: rgba(16, 185, 129, 0.2);
+  background: rgba(16, 185, 129, 0.18);
   color: var(--tf-primary-strong);
 }
 
@@ -54,26 +63,97 @@
   gap: 8px;
 }
 
+.team-metrics > div {
+  text-align: center;
+}
+
 .team-metrics span {
   font-size: 11px;
   color: var(--tf-muted);
+  display: block;
 }
 
 .team-metrics strong {
   display: block;
   margin-top: 4px;
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--tf-ink);
+}
+
+.member-progress {
+  padding: 0 2px;
+}
+
+.team-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .role-select {
-  width: 100%;
+  flex: 1;
   padding: 8px 10px;
   border-radius: 10px;
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  border: 1px solid var(--tf-border);
   font-size: 12px;
+  background: var(--tf-card-solid);
+  color: var(--tf-ink);
+  cursor: pointer;
+}
+
+.remove-member-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.remove-member-btn:hover {
+  background: rgba(239, 68, 68, 0.18);
 }
 
 .role-readonly {
   font-size: 12px;
   color: var(--tf-muted);
+  text-align: center;
+  padding: 6px 0;
+  border-top: 1px solid var(--tf-border);
+}
+
+.empty-team {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--tf-muted);
+}
+
+.empty-team i {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.progress {
+  width: 100%;
+  height: 5px;
+  background: var(--tf-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--tf-primary), #34d399);
+  border-radius: 999px;
+  transition: width 0.6s ease;
 }

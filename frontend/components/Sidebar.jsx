@@ -2,15 +2,20 @@ import React from 'react';
 import Avatar from './Avatar';
 import './Sidebar.css';
 
-function Sidebar({ currentUser, view, onNav, onLogout, isOpen, onClose }) {
-  const NAV = [
-    { id:"dashboard", icon:"ti-layout-dashboard", label:"Dashboard" },
-    { id:"projects",  icon:"ti-folder",           label:"Projects"  },
-    { id:"tasks",     icon:"ti-list-check",        label:"My Tasks"  },
-    { id:"team",      icon:"ti-users",             label:"Team"      },
+function Sidebar({ currentUser, view, onNav, onLogout, isOpen, onClose, dark, onToggleDark }) {
+  const allNav = [
+    { id: 'dashboard', icon: 'ti-layout-dashboard', label: 'Dashboard' },
+    { id: 'projects',  icon: 'ti-folder',           label: 'Projects'  },
+    { id: 'tasks',     icon: 'ti-list-check',        label: 'My Tasks'  },
+    { id: 'team',      icon: 'ti-users',             label: 'Team'      },
   ];
+
+  const NAV = currentUser.role === 'admin'
+    ? allNav
+    : allNav.filter(item => item.id !== 'team');
+
   return (
-    <aside className={`sidebar ${isOpen ? "is-open" : ""}`}>
+    <aside className={`sidebar ${isOpen ? 'is-open' : ''}`}>
       <div className="sidebar-header">
         <div className="brand-mark">
           <i className="ti ti-layout-kanban" aria-hidden="true" />
@@ -27,15 +32,21 @@ function Sidebar({ currentUser, view, onNav, onLogout, isOpen, onClose }) {
           <button
             key={item.id}
             onClick={() => onNav(item.id)}
-            className={`nav-item ${view === item.id ? "active" : ""}`}
+            className={`nav-item ${view === item.id ? 'active' : ''}`}
           >
             <i className={`ti ${item.icon}`} aria-hidden="true" />
-            {item.label}
+            <span>{item.label}</span>
           </button>
         ))}
       </nav>
 
       <div className="sidebar-footer">
+        {/* Dark mode toggle */}
+        <button className="dark-toggle" onClick={onToggleDark} title="Toggle dark mode" aria-label="Toggle dark mode">
+          <i className={`ti ${dark ? 'ti-sun' : 'ti-moon'}`} aria-hidden="true" />
+          <span>{dark ? 'Light mode' : 'Dark mode'}</span>
+        </button>
+
         <div className="sidebar-user">
           <Avatar user={currentUser} size={34} />
           <div>

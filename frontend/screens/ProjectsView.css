@@ -89,6 +89,25 @@
   background: transparent;
   color: var(--tf-muted);
   cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.icon-ghost:hover {
+  color: var(--tf-ink);
+  background: rgba(148, 163, 184, 0.15);
+}
+
+.icon-ghost.danger:hover {
+  color: #e53e3e;
+  background: rgba(229, 62, 62, 0.08);
+}
+
+.project-actions {
+  display: flex;
+  gap: 2px;
+  align-items: center;
 }
 
 .project-desc {

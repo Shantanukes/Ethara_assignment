@@ -4,11 +4,14 @@ import Textarea from '../FormElements/Textarea';
 import Btn from '../FormElements/Btn';
 import Avatar from '../Avatar';
 
-function ProjectForm({ users, currentUser, onSave, onClose }) {
-  const [f, setF] = useState({ name:"", description:"", members:[currentUser.id] });
-  const set = (k) => (e) => setF(p => ({ ...p, [k]:e.target.value }));
+function ProjectForm({ init, users, currentUser, onSave, onClose }) {
+  const [f, setF] = useState(init
+    ? { name: init.name || "", description: init.description || "", members: init.members || [currentUser.id] }
+    : { name: "", description: "", members: [currentUser.id] }
+  );
+  const set = (k) => (e) => setF(p => ({ ...p, [k]: e.target.value }));
   const toggle = (uid) => setF(p => ({
-    ...p, members: p.members.includes(uid) ? p.members.filter(i=>i!==uid) : [...p.members, uid]
+    ...p, members: p.members.includes(uid) ? p.members.filter(i => i !== uid) : [...p.members, uid]
   }));
 
   return (
@@ -36,8 +39,11 @@ function ProjectForm({ users, currentUser, onSave, onClose }) {
       </div>
       <div style={{ display:"flex", gap:8, justifyContent:"flex-end", paddingTop:4 }}>
         <Btn onClick={onClose}>Cancel</Btn>
-        <Btn variant="primary" onClick={() => { if (!f.name.trim()) return; onSave({ ...f, members:[...new Set([currentUser.id,...f.members])] }); }}>
-          Create project
+        <Btn variant="primary" onClick={() => {
+          if (!f.name.trim()) return;
+          onSave({ ...f, members: [...new Set([currentUser.id, ...f.members])] });
+        }}>
+          {init ? "Save changes" : "Create project"}
         </Btn>
       </div>
     </div>

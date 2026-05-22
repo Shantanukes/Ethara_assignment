@@ -3,10 +3,11 @@
 
 <head>
   <meta charset="UTF-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TaskFlow — The modern SaaS task management platform for high-performing teams. Manage projects, tasks, and team collaboration in one place." />
+  <meta name="theme-color" content="#10b981" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-  <title>Task Manager</title>
+  <title>TaskFlow — Team Task Management</title>
   <style>
     :root {
       --color-background-primary: #ffffff;
@@ -30,14 +31,26 @@
       font-family: var(--font-sans);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
+
+    /* Prevent flash of unstyled content */
+    #root { visibility: hidden; }
+    #root.ready { visibility: visible; }
   </style>
 </head>
 
 <body>
   <div id="root"></div>
+  <script>
+    // Apply dark mode before React renders to prevent flash
+    if (localStorage.getItem('taskflow_dark') === 'true') {
+      document.documentElement.classList.add('dark');
+    }
+    // Mark root as ready after first paint
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('root').classList.add('ready');
+    });
+  </script>
   <script type="module" src="/index.jsx"></script>
 </body>
 

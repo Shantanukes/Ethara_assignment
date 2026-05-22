@@ -152,6 +152,36 @@
   font-family: 'Courier New', Courier, monospace;
 }
 
+.demo-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.demo-login-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.demo-login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.demo-login-btn strong {
+  min-width: 56px;
+  font-weight: 700;
+}
+
 @keyframes gradientDrift {
   0%, 100% { background-position: 0% 30%; }
   50% { background-position: 100% 70%; }

@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ProjectsView.css';
 import Btn from '../components/FormElements/Btn';
 import Avatar from '../components/Avatar';
 
-function ProjectsView({ projects, tasks, users, currentUser, onNewProject, onViewProject, onDeleteProject }) {
+function ProjectsView({ projects, tasks, users, currentUser, onNewProject, onViewProject, onEditProject, onDeleteProject }) {
+  const [search, setSearch] = useState('');
+
+  const filtered = projects.filter(p =>
+    !search || p.name.toLowerCase().includes(search.toLowerCase()) || (p.description || '').toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="page-shell">
       <header className="page-header">
@@ -21,17 +27,18 @@ function ProjectsView({ projects, tasks, users, currentUser, onNewProject, onVie
       <div className="projects-toolbar">
         <div className="search-field">
           <i className="ti ti-search" aria-hidden="true" />
-          <input type="search" placeholder="Search projects" aria-label="Search projects" />
-        </div>
-        <div className="chip-group">
-          <button className="chip-btn active">All</button>
-          <button className="chip-btn">Active</button>
-          <button className="chip-btn">On hold</button>
+          <input
+            type="search"
+            placeholder="Search projects"
+            aria-label="Search projects"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
         </div>
       </div>
 
       <div className="projects-grid">
-        {projects.map(p => {
+        {filtered.map(p => {
           const pt = tasks.filter(t => t.projectId === p.id);
           const pdone = pt.filter(t => t.status === "done").length;
           const pct = pt.length ? Math.round((pdone / pt.length) * 100) : 0;
@@ -41,14 +48,24 @@ function ProjectsView({ projects, tasks, users, currentUser, onNewProject, onVie
               <div className="project-head">
                 <h3>{p.name}</h3>
                 {currentUser.role === "admin" && (
-                  <button
-                    onClick={e => { e.stopPropagation(); onDeleteProject(p.id); }}
-                    className="icon-ghost"
-                    title="Delete project"
-                    aria-label="Delete project"
-                  >
-                    <i className="ti ti-trash" aria-hidden="true" />
-                  </button>
+                  <div className="project-actions" onClick={e => e.stopPropagation()}>
+                    <button
+                      onClick={() => onEditProject(p)}
+                      className="icon-ghost"
+                      title="Edit project"
+                      aria-label="Edit project"
+                    >
+                      <i className="ti ti-edit" aria-hidden="true" />
+                    </button>
+                    <button
+                      onClick={() => onDeleteProject(p.id)}
+                      className="icon-ghost danger"
+                      title="Delete project"
+                      aria-label="Delete project"
+                    >
+                      <i className="ti ti-trash" aria-hidden="true" />
+                    </button>
+                  </div>
                 )}
               </div>
               <p className="project-desc">{p.description || "No description provided."}</p>
@@ -75,10 +92,10 @@ function ProjectsView({ projects, tasks, users, currentUser, onNewProject, onVie
             </article>
           );
         })}
-        {projects.length === 0 && (
+        {filtered.length === 0 && (
           <div className="empty-card">
             <i className="ti ti-folder-x" aria-hidden="true" />
-            <p>No projects yet</p>
+            <p>{search ? "No projects match your search." : "No projects yet."}</p>
           </div>
         )}
       </div>

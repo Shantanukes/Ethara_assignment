@@ -12,7 +12,9 @@ function TaskForm({ init, projects, users, currentUser, onSave, onClose }) {
   });
   const set = (k) => (e) => setF(p => ({ ...p, [k]:e.target.value }));
   const proj = projects.find(p => p.id === f.projectId);
-  const members = proj ? users.filter(u => proj.members.includes(u.id)) : users;
+  const members = (currentUser.role === 'admin' || !proj) 
+    ? users 
+    : users.filter(u => proj.members.includes(u.id));
 
   return (
     <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
@@ -28,6 +30,7 @@ function TaskForm({ init, projects, users, currentUser, onSave, onClose }) {
           {members.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
         </Select>
         <Select label="Status" value={f.status} onChange={set("status")}>
+          <option value="backlog">Backlog</option>
           <option value="todo">To Do</option>
           <option value="in-progress">In Progress</option>
           <option value="done">Done</option>

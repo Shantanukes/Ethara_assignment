@@ -1,35 +1,54 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+/* ── Light mode tokens ──────────────────────────────────────────────────────── */
 :root {
-  --tf-bg: #f8fafc;
-  --tf-card: rgba(255, 255, 255, 0.75);
-  --tf-card-solid: #ffffff;
-  --tf-border: rgba(148, 163, 184, 0.2);
-  --tf-dark: #0f172a;
-  --tf-dark-soft: #111827;
-  --tf-primary: #10b981;
+  --tf-bg:             #f8fafc;
+  --tf-card:           rgba(255, 255, 255, 0.8);
+  --tf-card-solid:     #ffffff;
+  --tf-border:         rgba(148, 163, 184, 0.2);
+  --tf-dark:           #0f172a;
+  --tf-dark-soft:      #111827;
+  --tf-primary:        #10b981;
   --tf-primary-strong: #059669;
-  --tf-muted: #64748b;
-  --tf-ink: #0f172a;
-  --tf-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
-  --tf-radius: 18px;
+  --tf-muted:          #64748b;
+  --tf-ink:            #0f172a;
+  --tf-shadow:         0 20px 50px rgba(15, 23, 42, 0.08);
+  --tf-radius:         18px;
+  --tf-surface:        #ffffff;
+  --tf-text:           #0f172a;
 }
 
-* {
-  box-sizing: border-box;
+/* ── Dark mode tokens ───────────────────────────────────────────────────────── */
+.dark {
+  --tf-bg:             #0f172a;
+  --tf-card:           rgba(30, 41, 59, 0.9);
+  --tf-card-solid:     #1e293b;
+  --tf-border:         rgba(148, 163, 184, 0.12);
+  --tf-dark:           #1e293b;
+  --tf-dark-soft:      #0f172a;
+  --tf-primary:        #10b981;
+  --tf-primary-strong: #34d399;
+  --tf-muted:          #94a3b8;
+  --tf-ink:            #f1f5f9;
+  --tf-shadow:         0 20px 50px rgba(0, 0, 0, 0.35);
+  --tf-surface:        #1e293b;
+  --tf-text:           #f1f5f9;
 }
+
+/* ── Reset ──────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
   background: var(--tf-bg);
   color: var(--tf-ink);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-#root {
-  min-height: 100vh;
-}
+#root { min-height: 100vh; }
 
+/* ── Layout ─────────────────────────────────────────────────────────────────── */
 .app-shell {
   position: relative;
   display: flex;
@@ -43,6 +62,7 @@ body {
   height: 100vh;
   overflow-y: auto;
   background: var(--tf-bg);
+  position: relative;
 }
 
 .page-shell {
@@ -59,24 +79,17 @@ body {
   gap: 16px;
 }
 
-.page-header h2 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-}
+.page-header h2 { margin: 0; font-size: 22px; font-weight: 600; }
+.page-subtitle { margin: 4px 0 0; font-size: 13px; color: var(--tf-muted); }
 
-.page-subtitle {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: var(--tf-muted);
-}
-
+/* ── Table card ─────────────────────────────────────────────────────────────── */
 .table-card {
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--tf-card);
   border-radius: 18px;
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid var(--tf-border);
   overflow: hidden;
   box-shadow: var(--tf-shadow);
+  backdrop-filter: blur(16px);
 }
 
 .empty-text {
@@ -87,6 +100,7 @@ body {
   margin: 0;
 }
 
+/* ── Sidebar overlay ────────────────────────────────────────────────────────── */
 .sidebar-overlay {
   position: fixed;
   inset: 0;
@@ -96,16 +110,11 @@ body {
   transition: opacity 0.2s ease;
   z-index: 40;
 }
+.sidebar-overlay.is-open { opacity: 1; pointer-events: auto; }
 
-.sidebar-overlay.is-open {
-  opacity: 1;
-  pointer-events: auto;
-}
+.mobile-only { display: none; }
 
-.mobile-only {
-  display: none;
-}
-
+/* ── Search field ───────────────────────────────────────────────────────────── */
 .search-field {
   display: inline-flex;
   align-items: center;
@@ -125,21 +134,21 @@ body {
   background: transparent;
   font-size: 13px;
   width: 100%;
+  color: var(--tf-ink);
 }
 
-.chip-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
+/* ── Chip buttons ───────────────────────────────────────────────────────────── */
+.chip-group { display: inline-flex; align-items: center; gap: 8px; }
 
 .chip-btn {
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--tf-border);
+  background: var(--tf-card);
+  color: var(--tf-muted);
   padding: 6px 12px;
   border-radius: 999px;
   font-size: 12px;
   cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
 .chip-btn.active {
@@ -148,8 +157,39 @@ body {
   border-color: rgba(16, 185, 129, 0.35);
 }
 
+.chip-btn:hover:not(.active) {
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--tf-ink);
+}
+
+/* ── Global loader ──────────────────────────────────────────────────────────── */
+.global-loader {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--tf-primary), #34d399, var(--tf-primary));
+  background-size: 200% 100%;
+  animation: loaderSlide 1.5s ease-in-out infinite;
+  z-index: 100;
+}
+
+@keyframes loaderSlide {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.spinner {
+  display: none; /* loader uses the bar above */
+}
+
+/* ── Dark mode overrides for form inputs ────────────────────────────────────── */
+.dark input, .dark textarea, .dark select {
+  background: rgba(30, 41, 59, 0.8);
+  color: var(--tf-ink);
+  border-color: var(--tf-border);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 960px) {
-  .mobile-only {
-    display: inline-flex;
-  }
+  .mobile-only { display: inline-flex; }
 }

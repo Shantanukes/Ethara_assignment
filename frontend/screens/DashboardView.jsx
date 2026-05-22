@@ -4,7 +4,7 @@ import { isOverdue } from '../constants';
 import StatusBadge from '../components/StatusBadge';
 import Avatar from '../components/Avatar';
 
-function DashboardView({ tasks, projects, users, currentUser, onNewTask, onViewProject, onToggleSidebar }) {
+function DashboardView({ tasks, projects, users, currentUser, onNewTask, onViewProject, onViewAllTasks, onToggleSidebar }) {
   const viewableTasks = currentUser.role === "admin" ? tasks : tasks.filter(t => t.assignedTo === currentUser.id);
   const inProg = viewableTasks.filter(t => t.status === "in-progress").length;
   const done = viewableTasks.filter(t => t.status === "done").length;
@@ -142,7 +142,7 @@ function DashboardView({ tasks, projects, users, currentUser, onNewTask, onViewP
         <article className="card tasks-card">
           <div className="card-header">
             <h4>Recent tasks</h4>
-            <button className="ghost-btn">View all</button>
+            <button className="ghost-btn" onClick={onViewAllTasks}>View all</button>
           </div>
           {recent.length === 0 ? (
             <div className="empty-state">No tasks yet. Create your first task.</div>

@@ -158,6 +158,28 @@
   color: #ecfdf3;
 }
 
+.dark-toggle {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(148, 163, 184, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  margin-bottom: 10px;
+}
+
+.dark-toggle:hover {
+  background: rgba(16, 185, 129, 0.15);
+  color: #d1fae5;
+}
+
 @media (max-width: 960px) {
   .sidebar {
     position: fixed;
